@@ -10,18 +10,11 @@
 <title>Insert title here</title>
 </head>
 <body>
-
-	<div align="center" style="padding-top: 5%"><h1 id="header">Congrats! You are
-		logged in! ${loggedInUser.email}</h1></div>
-<div align="center" style="padding-top: 5%"><h3 id="header">Your selected tours:</h1></div>
-<div align="center" style="padding-top: 2%">
-		<mytag:myTourList coll="${myTours}" />
-	</div>
+	<div align="center" style="padding-top: 5%"><h3 id="header">Make your order,
+		${loggedInUser.name}</h3></div>
 	<div align="center" style="padding-top: 5%">
-		<form action="order" method="GET">
-			<input type="submit" value="MakeOrder" />
-		</form>
-		</div>
+		<mytag:order coll="${tours}" />
+	</div>
 	<div align="center" style="padding-top: 10%">
 		<form action="logout" method="GET">
 			<input type="submit" value="Logout" />

@@ -19,21 +19,34 @@ public class SaveUserServlet extends HttpServlet {
 	 */
 	private DefaultUserDao userDao;
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		RequestDispatcher rd = request.getRequestDispatcher("WEB-INF/views/userRegistration.jsp");
+		RequestDispatcher rd = request.getRequestDispatcher("WEB-INF/views/login.jsp");
 		rd.forward(request, response);
+		String reg = request.getParameter("Registration");
+		if (reg != null) {
+			UserData user = new UserData();
+			user.setName(request.getParameter("name"));
+			user.setLastName(request.getParameter("lastName"));
+			user.setRole(request.getParameter("role"));
+			user.setEmail(request.getParameter("email"));
+			user.setPassword(request.getParameter("password"));
+			userDao = DefaultUserDao.getUserDaoInstance();
+			userDao.saveUser(user);
+		}
+		
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		UserData user = new UserData();
 		user.setName(request.getParameter("name"));
 		user.setLastName(request.getParameter("lastName"));
-		user.setRoleId(Integer.valueOf(request.getParameter("roleId")));
+		user.setRole(request.getParameter("role"));
 		user.setEmail(request.getParameter("email"));
 		user.setPassword(request.getParameter("password"));
 		userDao = DefaultUserDao.getUserDaoInstance();
 		userDao.saveUser(user);
-		//response.sendRedirect(getServletContext().getContextPath() + "/successRegistration.jsp");
-		request.getRequestDispatcher("WEB-INF/views/successRegistration.jsp").forward(request, response);
+		if (user != null) {
+		request.getRequestDispatcher("WEB-INF/views/login.jsp").forward(request, response);
+		}
 	}
 
 }

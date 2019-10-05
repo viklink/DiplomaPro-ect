@@ -2,15 +2,17 @@ package models;
 
 public class OrderData {
 	
-	private int orderId;
+	private int id;
 	private int userId;
 	private int tourId;
 	private String date;
-	public int getOrderId() {
-		return orderId;
+	private int personNum;
+
+	public int getId() {
+		return id;
 	}
-	public void setOrderId(int orderId) {
-		this.orderId = orderId;
+	public void setId(int id) {
+		this.id = id;
 	}
 	public int getUserId() {
 		return userId;
@@ -30,10 +32,18 @@ public class OrderData {
 	public void setDate(String date) {
 		this.date = date;
 	}
+	public int getPersonNum() {
+		return personNum;
+	}
+	public void setPersonNum(int personNum) {
+		this.personNum = personNum;
+	}
 	@Override
 	public String toString() {
-		return "Order [orderId=" + orderId + ", userId=" + userId + ", tourId=" + tourId + ", date=" + date + "]";
+		return "Order [id=" + id + ", userId=" + userId + ", tourId=" + tourId + ", date=" + date
+				+ ", personNum=" + personNum + "]";
 	}
+	
 	
 	
 

@@ -22,32 +22,37 @@ public class DefaultTourDao implements TourDao {
 	public static final String SELECT_TOUR_BY_ID = "SELECT * FROM tours WHERE id = ?";
 	public static final String SELECT_TOUR_BY_NAME = "SELECT * FROM tours WHERE name = ?";
 	public static final String SELECT_TOUR_BY_PRICE = "SELECT * FROM tours WHERE price < ?";
-	public static final String INSERT_TOUR = "INSERT INTO tours (id, name) VALUES (?, ?)";
-	public static final String UPDATE_TOUR_RECORD = "UPDATE tours SET name = ?, price = ? WHERE id = ?";
+	public static final String SELECT_ALL_TOURS = "SELECT * FROM tours";
+	public static final String INSERT_TOUR = "INSERT INTO tours (name, price, description) VALUES (?, ?, ?)";
+	public static final String UPDATE_TOUR_RECORD = "UPDATE tours SET name = ?, price = ?, description = ? WHERE id = ?";
 	public static final String DELETE_TOUR_RECORD = "DELETE FROM tours WHERE id = ?";
-	
+
 	private static DefaultTourDao instance;
+
 	private DefaultTourDao() {
 	}
+
 	public static synchronized DefaultTourDao getTourDaoInstance() {
-		if(instance == null) {
+		if (instance == null) {
 			instance = new DefaultTourDao();
 		}
 		return instance;
 	}
+
 	@Override
 	public TourData getTourById(int id) {
 		TourData tour = new TourData();
 		try (Connection conn = getConnection();
 				PreparedStatement statement = conn.prepareStatement(SELECT_TOUR_BY_ID)) {
-				statement.setInt(1, id);
-				try (ResultSet rs = statement.executeQuery()) {
-					while (rs.next()) {
-						tour.setId(rs.getInt("id"));
-						tour.setName(rs.getString("name"));
-						tour.setPrice(rs.getDouble("price"));
-						}
+			statement.setInt(1, id);
+			try (ResultSet rs = statement.executeQuery()) {
+				while (rs.next()) {
+					tour.setId(rs.getInt("id"));
+					tour.setName(rs.getString("name"));
+					tour.setPrice(rs.getDouble("price"));
+					tour.setDescription(rs.getString("description"));
 				}
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -59,36 +64,38 @@ public class DefaultTourDao implements TourDao {
 		TourData tour = new TourData();
 		try (Connection conn = getConnection();
 				PreparedStatement statement = conn.prepareStatement(SELECT_TOUR_BY_NAME)) {
-				statement.setString(1, name);
-				try (ResultSet rs = statement.executeQuery()) {
-					while (rs.next()) {
-						tour.setId(rs.getInt("id"));
-						tour.setName(rs.getString("name"));
-						tour.setPrice(rs.getDouble("price"));
-						}
+			statement.setString(1, name);
+			try (ResultSet rs = statement.executeQuery()) {
+				while (rs.next()) {
+					tour.setId(rs.getInt("id"));
+					tour.setName(rs.getString("name"));
+					tour.setPrice(rs.getDouble("price"));
+					tour.setDescription(rs.getString("description"));
 				}
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return tour;
 	}
-	
+
 	@Override
 	public List<TourData> getTourByPrice(double price) {
 		List<TourData> tours = new ArrayList<>();
 		double maxPrice = 5000;
 		try (Connection conn = getConnection();
 				PreparedStatement statement = conn.prepareStatement(SELECT_TOUR_BY_PRICE)) {
-				statement.setDouble(1, maxPrice);
-				try (ResultSet rs = statement.executeQuery()) {
-					while (rs.next()) {
-						TourData tourData = new TourData();
-						tourData.setId(rs.getInt("id"));
-						tourData.setName(rs.getString("name"));
-						tourData.setPrice(rs.getDouble("price"));
-						tours.add(tourData);
-						}
+			statement.setDouble(1, maxPrice);
+			try (ResultSet rs = statement.executeQuery()) {
+				while (rs.next()) {
+					TourData tourData = new TourData();
+					tourData.setId(rs.getInt("id"));
+					tourData.setName(rs.getString("name"));
+					tourData.setPrice(rs.getDouble("price"));
+					tourData.setDescription(rs.getString("description"));
+					tours.add(tourData);
 				}
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -96,53 +103,72 @@ public class DefaultTourDao implements TourDao {
 	}
 
 	@Override
-	public boolean saveTour(TourData tourData) {
-		int rows = 0;
-		try (Connection conn = getConnection();
-				PreparedStatement statement = conn.prepareStatement(INSERT_TOUR)) {
-				
-				statement.setInt(1, 6);
-				statement.setString(2, "Tropic paradise");
-				statement.setDouble(3, 5000);
-				
-				rows = statement.executeUpdate();
-				
+	public List<TourData> getAllTours() {
+		List<TourData> tours = new ArrayList<>();
+		try (Connection conn = getConnection(); PreparedStatement statement = conn.prepareStatement(SELECT_ALL_TOURS)) {
+			try (ResultSet rs = statement.executeQuery()) {
+				while (rs.next()) {
+					TourData tourData = new TourData();
+					tourData.setId(rs.getInt("id"));
+					tourData.setName(rs.getString("name"));
+					tourData.setPrice(rs.getDouble("price"));
+					tourData.setDescription(rs.getString("description"));
+					tours.add(tourData);
+				}
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		if(rows != 0) {
+		return tours;
+	}
+
+	@Override
+	public boolean saveTour(TourData tour) {
+		int rows = 0;
+		try (Connection conn = getConnection(); PreparedStatement statement = conn.prepareStatement(INSERT_TOUR)) {
+			
+			statement.setString(1, tour.getName());
+			statement.setDouble(2, tour.getPrice());
+			statement.setString(3, tour.getDescription());
+
+			rows = statement.executeUpdate();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		if (rows != 0) {
 			return true;
 		} else {
-		return false;
+			return false;
 		}
 	}
-	
+
 	@Override
-	public void updateTourRecord(int id) {
+	public void updateTourRecord(TourData tour) {
 		try (Connection conn = getConnection();
 				PreparedStatement statement = conn.prepareStatement(UPDATE_TOUR_RECORD)) {
-			statement.setString(1, "Fjords of Norway");
-			statement.setDouble(2, 3500);
-			statement.setInt(3, 5);
+			statement.setString(1, tour.getName());
+			statement.setDouble(2, tour.getPrice());
+			statement.setString(3, tour.getDescription());
+			statement.setInt(4, tour.getId());
 			statement.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		System.out.println("Record is updated");
 	}
-	
+
 	@Override
-	public void deleteTourRecord(int id) {
+	public void deleteTour(int id) {
 		try (Connection conn = getConnection();
 				PreparedStatement statement = conn.prepareStatement(DELETE_TOUR_RECORD)) {
-			statement.setInt(1, 7);
+			statement.setInt(1, id);
 			statement.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		System.out.println("Record is deleted");
 	}
-	
+
 	private Connection getConnection() {
 		try {
 			Class.forName(MYSQL_JDBC_DRIVER_NAME);

@@ -20,24 +20,22 @@ public class UpdateTourServlet extends HttpServlet {
 
 	private DefaultTourDao tourDao;
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Integer id = Integer.valueOf(request.getParameter("id"));
-		tourDao = DefaultTourDao.getTourDaoInstance();
-		TourData tour = tourDao.getTourById(id);
+		
 		RequestDispatcher rd = request.getRequestDispatcher("WEB-INF/views/admin.jsp");
 		rd.forward(request, response);
 	}
 
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Integer id = Integer.valueOf(request.getParameter("id"));
+		HttpSession session = request.getSession();
 		tourDao = DefaultTourDao.getTourDaoInstance();
-		TourData tour = tourDao.getTourById(id);
-		tour.setId(id);
+		TourData tour = tourDao.getTourById(Integer.valueOf(request.getParameter("id")));
 		tour.setName(request.getParameter("name"));
 		tour.setPrice(Double.valueOf(request.getParameter("price")));
 		tour.setDescription(request.getParameter("description"));
-		tourDao.updateTourRecord(id);
-		request.getRequestDispatcher("WEB-INF/views/tourUpdate.jsp").forward(request, response);
+		tourDao.updateTourRecord(tour);
+		session.setAttribute("currentTour", tour);
+		request.getRequestDispatcher("WEB-INF/views/success.jsp").forward(request, response);
 	}
 
 }

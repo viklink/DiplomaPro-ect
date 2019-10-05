@@ -18,8 +18,9 @@ public class DefaultUserDao implements UserDao {
 	private static final String PASSWORD = "jogdogJ25";
 
 	public static final String SELECT_USER_BY_ID = "SELECT * FROM users WHERE id = ?";
-	public static final String INSERT_USER = "INSERT INTO users (id, name, last_name, role_id) VALUES (?, ?, ?, ?)";
-	public static final String UPDATE_USER_RECORD = "UPDATE users SET name = ?, last_name = ?, role_id = ? WHERE id = ?";
+	public static final String SELECT_USER_BY_EMAIL = "SELECT * FROM users WHERE email = ?";
+	public static final String INSERT_USER = "INSERT INTO users (id, name, last_name, role, email, password) VALUES (?, ?, ?, ?, ?, ?)";
+	public static final String UPDATE_USER_RECORD = "UPDATE users SET name = ?, last_name = ?, role = ?, email = ?, password = ? WHERE id = ?";
 	public static final String DELETE_USER_RECORD = "DELETE FROM users WHERE id = ?";
 	
 	//создание синглтона
@@ -46,7 +47,32 @@ public class DefaultUserDao implements UserDao {
 					user.setId(rs.getInt("id"));
 					user.setName(rs.getString("name"));
 					user.setLastName(rs.getString("last_name"));
-					user.setRoleId(rs.getInt("role_id"));
+					user.setRole(rs.getString("role"));
+					user.setEmail(rs.getString("email"));
+					user.setPassword(rs.getString("password"));
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return user;
+	}
+	
+	@Override
+	public UserData getUserByEmail(String email) {
+		UserData user = null;
+		try (Connection conn = getConnection();
+				PreparedStatement statement = conn.prepareStatement(SELECT_USER_BY_EMAIL)) {
+			statement.setString(1, email);
+			try (ResultSet rs = statement.executeQuery()) {
+				while (rs.next()) {
+					user = new UserData();
+					user.setId(rs.getInt("id"));
+					user.setName(rs.getString("name"));
+					user.setLastName(rs.getString("last_name"));
+					user.setRole(rs.getString("role"));
+					user.setEmail(rs.getString("email"));
+					user.setPassword(rs.getString("password"));
 				}
 			}
 		} catch (SQLException e) {
@@ -60,10 +86,12 @@ public class DefaultUserDao implements UserDao {
 		int rows = 0;
 		try (Connection conn = getConnection(); 
 				PreparedStatement statement = conn.prepareStatement(INSERT_USER)) {
-			statement.setInt(1, 7);
-			statement.setString(2, "Daniil");
-			statement.setString(3, "Bobrov");
-			statement.setInt(4, 3);
+			statement.setInt(1, user.getId());
+			statement.setString(2, user.getName());
+			statement.setString(3, user.getLastName());
+			statement.setString(4, user.getRole());
+			statement.setString(5, user.getEmail());
+			statement.setString(6, user.getPassword());
 			rows = statement.executeUpdate();
 
 		} catch (SQLException e) {
@@ -84,6 +112,8 @@ public class DefaultUserDao implements UserDao {
 			statement.setString(2, "Zolotarev");
 			statement.setInt(3, 3);
 			statement.setInt(4, 6);
+			statement.setString(5, "zxcv");
+			statement.setInt(6, id);
 			statement.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -94,7 +124,7 @@ public class DefaultUserDao implements UserDao {
 	public void deleteUserRecord(int id) {
 		try (Connection conn = getConnection();
 				PreparedStatement statement = conn.prepareStatement(DELETE_USER_RECORD)) {
-			statement.setInt(1, 7);
+			statement.setInt(1, id);
 			statement.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();

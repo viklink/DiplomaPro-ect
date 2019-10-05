@@ -1,6 +1,9 @@
 package servlets;
 
 import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,7 +20,7 @@ public class LoginServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String userEmail = request.getParameter("userEmail");
 		String userPassword = request.getParameter("userPassword");
-		HttpSession session = request.getSession(false);
+		HttpSession session = request.getSession();
 		if (session != null) {
 			userDao = DefaultUserDao.getUserDaoInstance();
 			UserData user = userDao.getUserByEmail(request.getParameter("userEmail"));
@@ -25,16 +28,17 @@ public class LoginServlet extends HttpServlet {
 					&& user.getPassword().equals(userPassword)) {
 				session.setAttribute("userEmail", userEmail);
 				session.setAttribute("loggedInUser", user);
-				redirectUserByRoleId(response, user);
+				redirectUserByRole(response, user);
 
 			} else {
-				request.getRequestDispatcher("WEB-INF/views/login.jsp").forward(request, response);
+				RequestDispatcher rd = request.getRequestDispatcher("WEB-INF/views/login.jsp");
+				rd.forward(request, response);
 			}
 		}
 	}
 
-	private void redirectUserByRoleId(HttpServletResponse response, UserData user) throws IOException {
-		if (user != null && user.getRoleId() == 2) {
+	private void redirectUserByRole(HttpServletResponse response, UserData user) throws IOException {
+		if (user != null && user.getRole().equals("admin")) {
 			response.sendRedirect(getServletContext().getContextPath() + "/admin");
 		} else {
 			response.sendRedirect(getServletContext().getContextPath() + "/myaccount");
@@ -46,23 +50,19 @@ public class LoginServlet extends HttpServlet {
 		String userEmail = request.getParameter("userEmail");
 		String userPassword = request.getParameter("userPassword");
 
-		/*
-		 * if(userEmail.equals("asd@asd")) { UserData userData = new UserData();
-		 * userData.setRoleId(2); HttpSession session = request.getSession();
-		 * session.setAttribute("userEmail", userEmail);
-		 * session.setAttribute("loggedInUser", userData);
-		 * response.sendRedirect(getServletContext().getContextPath() + "/myaccount"); }
-		 */
 		userDao = DefaultUserDao.getUserDaoInstance();
 		UserData user = userDao.getUserByEmail(request.getParameter("userEmail"));
 		if (user != null && user.getPassword() != null && user.getPassword().equals(userPassword)) {
 			HttpSession session = request.getSession();
 			session.setAttribute("loggedInUser", user);
-			redirectUserByRoleId(response, user);
+			session.setAttribute("userEmail", userEmail);
+			request.setAttribute("userEmail", userEmail);
+			redirectUserByRole(response, user);
 
 		} else {
 			request.setAttribute("userNotRound", null);
-			request.getRequestDispatcher("WEB-INF/views/login.jsp").forward(request, response);
+			RequestDispatcher rd = request.getRequestDispatcher("WEB-INF/views/login.jsp");
+			rd.forward(request, response);
 		}
 
 	}

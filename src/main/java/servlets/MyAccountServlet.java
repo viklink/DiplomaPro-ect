@@ -4,14 +4,19 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import impl.DefaultOrderDao;
 import impl.DefaultTourDao;
 import impl.DefaultUserDao;
 import models.TourData;
+import models.UserData;
 
 /**
  * Servlet implementation class MyAccountServlet
@@ -19,14 +24,16 @@ import models.TourData;
 public class MyAccountServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
+	private DefaultUserDao userDao;
+	private DefaultOrderDao orderDao;
 	private DefaultTourDao tourDao;
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		tourDao = DefaultTourDao.getTourDaoInstance();
-		List<TourData> tours = tourDao.getAllTours();
-		request.setAttribute("tours", tours);
+		orderDao = DefaultOrderDao.getOrderDaoInstance();
+		userDao = DefaultUserDao.getUserDaoInstance();
+		HttpSession session = request.getSession();
+		String userEmail = (String) session.getAttribute("userEmail");
+		List<TourData> tours = orderDao.getTourByUserEmail(userEmail);
+		request.setAttribute("myTours", tours);
 		request.getRequestDispatcher("WEB-INF/views/myaccount.jsp").forward(request, response);
 	}
 

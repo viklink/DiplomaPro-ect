@@ -39,7 +39,10 @@ public class AdminFilter implements Filter {
 					responseNotAllowed(response);
 				}
 			} else {
-				RequestDispatcher rd = request.getRequestDispatcher("WEB-INF/views/login.jsp");
+				((HttpServletResponse)response)
+				.sendRedirect(((HttpServletRequest) request)
+				.getSession().getServletContext()
+				.getContextPath() + "/login");
 			}
 		}
 
