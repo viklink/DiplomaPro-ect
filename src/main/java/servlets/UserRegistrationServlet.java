@@ -24,7 +24,7 @@ public class UserRegistrationServlet extends HttpServlet {
 		UserData user = new UserData();
 		user.setName(request.getParameter("name"));
 		user.setLastName(request.getParameter("lastName"));
-		user.setRoleId(Integer.valueOf(request.getParameter("roleId")));
+		user.setRole(request.getParameter("role"));
 		user.setEmail(request.getParameter("email"));
 		userDao = DefaultUserDao.getUserDaoInstance();
 		userDao.saveUser(user);

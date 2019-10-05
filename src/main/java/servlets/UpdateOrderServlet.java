@@ -33,11 +33,12 @@ public class UpdateOrderServlet extends HttpServlet {
 		Integer orderId = Integer.valueOf(request.getParameter("orderId"));
 		orderDao = DefaultOrderDao.getOrderDaoInstance();
 		OrderData order = orderDao.getOrderById(orderId);
-		order.setOrderId(orderId);
+		order.setId(orderId);
 		order.setUserId(Integer.valueOf(request.getParameter("userId")));
 		order.setTourId(Integer.valueOf(request.getParameter("tourId")));
 		order.setDate(request.getParameter("date"));
-		orderDao.updateOrder(orderId);
+		order.setPersonNum(Integer.valueOf(request.getParameter("personNum")));
+		orderDao.updateOrder(order);
 		response.getWriter().println(order);
 	}
 }

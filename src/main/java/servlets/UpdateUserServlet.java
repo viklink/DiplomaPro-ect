@@ -36,7 +36,8 @@ public class UpdateUserServlet extends HttpServlet {
 		user.setId(id);
 		user.setName(request.getParameter("name"));
 		user.setLastName(request.getParameter("lastName"));
-		user.setRoleId(Integer.valueOf(request.getParameter("roleId")));
+		user.setRole(request.getParameter("role"));
+		user.setEmail(request.getParameter("email"));
 		userDao.updateUserRecord(id);
 		response.getWriter().println(user);
 	}

@@ -8,11 +8,11 @@ import models.UserData;
 
 public interface OrderDao {
 	
-	OrderData getOrderById(int orderId); 
-	boolean saveOrder(OrderData orderData);
-	void updateOrder(int id);
+	OrderData getOrderById(int id); 
+	boolean saveOrder(OrderData order);
+	void updateOrder(OrderData order);
 	void deleteOrder(int id);
-	List<TourData> getTourByUserId(int userId);
+	List<TourData> getTourByUserEmail(String email);
 	UserData getUserByTourCount();
 
 }

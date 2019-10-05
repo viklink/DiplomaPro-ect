@@ -1,80 +1,115 @@
-<!DOCTYPE web-app PUBLIC
- "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
- "http://java.sun.com/dtd/web-app_2_3.dtd" >
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.0">
 
-<web-app>
+<welcome-file-list>
+<welcome-file>login.jsp</welcome-file>
+</welcome-file-list>
   <display-name>Archetype Created Web Application</display-name>
+  <filter>
+  	<filter-name>AdminFilter</filter-name>
+  	<filter-class>filters.AdminFilter</filter-class>
+  </filter>
+  <filter>
+  	<description>
+  	</description>
+  	<display-name>UserFilter</display-name>
+  	<filter-name>UserFilter</filter-name>
+  	<filter-class>filters.UserFilter</filter-class>
+  </filter>
+  <filter-mapping>
+  	<filter-name>AdminFilter</filter-name>
+  	<url-pattern>/admin</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+  	<filter-name>UserFilter</filter-name>
+  	<url-pattern>/myaccount</url-pattern>
+  </filter-mapping>
   <servlet>
   	<servlet-name>DeletOrderServlet</servlet-name>
-  	<display-name>DeletOrderServlet</display-name>
-  	<description></description>
+  	
   	<servlet-class>servlets.DeletOrderServlet</servlet-class>
   </servlet>
   <servlet>
   	<servlet-name>DeleteUserServlet</servlet-name>
-  	<display-name>DeleteUserServlet</display-name>
-  	<description></description>
+  	
   	<servlet-class>servlets.DeleteUserServlet</servlet-class>
   </servlet>
   <servlet>
   	<servlet-name>DeleteTourServlet</servlet-name>
-  	<display-name>DeleteTourServlet</display-name>
-  	<description></description>
   	<servlet-class>servlets.DeleteTourServlet</servlet-class>
   </servlet>
   <servlet>
   	<servlet-name>SaveOrderServlet</servlet-name>
-  	<display-name>SaveOrderServlet</display-name>
-  	<description></description>
   	<servlet-class>servlets.SaveOrderServlet</servlet-class>
   </servlet>
   <servlet>
   	<servlet-name>SaveTourServlet</servlet-name>
-  	<display-name>SaveTourServlet</display-name>
-  	<description></description>
   	<servlet-class>servlets.SaveTourServlet</servlet-class>
   </servlet>
   <servlet>
   	<servlet-name>SaveUserServlet</servlet-name>
-  	<display-name>SaveUserServlet</display-name>
-  	<description></description>
   	<servlet-class>servlets.SaveUserServlet</servlet-class>
   </servlet>
   <servlet>
   	<servlet-name>UpdateUserServlet</servlet-name>
-  	<display-name>UpdateUserServlet</display-name>
-  	<description></description>
   	<servlet-class>servlets.UpdateUserServlet</servlet-class>
   </servlet>
   <servlet>
   	<servlet-name>UpdateOrderServlet</servlet-name>
-  	<display-name>UpdateOrderServlet</display-name>
-  	<description></description>
   	<servlet-class>servlets.UpdateOrderServlet</servlet-class>
   </servlet>
   <servlet>
   	<servlet-name>UpdateTourServlet</servlet-name>
-  	<display-name>UpdateTourServlet</display-name>
-  	<description></description>
   	<servlet-class>servlets.UpdateTourServlet</servlet-class>
   </servlet>
   <servlet>
   	<servlet-name>HelloServlet</servlet-name>
-  	<display-name>HelloServlet</display-name>
-  	<description></description>
   	<servlet-class>servlets.HelloServlet</servlet-class>
   </servlet>
   <servlet>
   	<servlet-name>TourByNameServlet</servlet-name>
-  	<display-name>TourByNameServlet</display-name>
-  	<description></description>
   	<servlet-class>servlets.TourByNameServlet</servlet-class>
   </servlet>
   <servlet>
   	<servlet-name>TourByPriceServlet</servlet-name>
-  	<display-name>TourByPriceServlet</display-name>
-  	<description></description>
   	<servlet-class>servlets.TourByPriceServlet</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>LoginServlet</servlet-name>
+  	<servlet-class>servlets.LoginServlet</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>MyAccountServlet</servlet-name>
+  	<servlet-class>servlets.MyAccountServlet</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>UserByEmailServlet</servlet-name>
+  	<servlet-class>servlets.UserByEmailServlet</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>UserRegistrationServlet</servlet-name>
+  	<servlet-class>servlets.UserRegistrationServlet</servlet-class>
+  </servlet>
+  <servlet>
+  	<description>
+  	</description>
+  	<display-name>AdminServlet</display-name>
+  	<servlet-name>AdminServlet</servlet-name>
+  	<servlet-class>servlets.AdminServlet</servlet-class>
+  </servlet>
+  <servlet>
+  	<description>
+  	</description>
+  	<display-name>LogoutServlet</display-name>
+  	<servlet-name>LogoutServlet</servlet-name>
+  	<servlet-class>servlets.LogoutServlet</servlet-class>
+  </servlet>
+  <servlet>
+  	<description>
+  	</description>
+  	<display-name>OrderServlet</display-name>
+  	<servlet-name>OrderServlet</servlet-name>
+  	<servlet-class>servlets.OrderServlet</servlet-class>
   </servlet>
   <servlet-mapping>
   	<servlet-name>DeletOrderServlet</servlet-name>
@@ -124,4 +159,44 @@
   	<servlet-name>TourByPriceServlet</servlet-name>
   	<url-pattern>/tourByPrice</url-pattern>
   </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>LoginServlet</servlet-name>
+  	<url-pattern>/login</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>MyAccountServlet</servlet-name>
+  	<url-pattern>/myaccount</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>UserByEmailServlet</servlet-name>
+  	<url-pattern>/userByEmail</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>UserRegistrationServlet</servlet-name>
+  	<url-pattern>/registration</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>AdminServlet</servlet-name>
+  	<url-pattern>/admin</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>LogoutServlet</servlet-name>
+  	<url-pattern>/logout</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>OrderServlet</servlet-name>
+  	<url-pattern>/order</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+ <servlet-name>default</servlet-name>
+ <url-pattern>*.js</url-pattern>
+</servlet-mapping>
+<servlet-mapping>
+ <servlet-name>default</servlet-name>
+ <url-pattern>*.css</url-pattern>
+</servlet-mapping>
+<servlet-mapping>
+ <servlet-name>default</servlet-name>
+ <url-pattern>*.images</url-pattern>
+</servlet-mapping>
 </web-app>

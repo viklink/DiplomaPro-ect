@@ -5,7 +5,14 @@ public class TourData {
 	private int id;
 	private String name;
 	private double price;
+	private String description;
 	
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
 	public int getId() {
 		return id;
 	}
@@ -26,8 +33,9 @@ public class TourData {
 	}
 	@Override
 	public String toString() {
-		return "Tour [id=" + id + ", name=" + name + ", price=" + price + "]";
+		return "Tour [id=" + id + ", name=" + name + ", price=" + price + ", description=" + description + "]";
 	}
+	
 	
 
 }

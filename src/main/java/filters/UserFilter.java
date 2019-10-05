@@ -32,12 +32,12 @@ public class UserFilter implements Filter {
 			if (obj != null && obj instanceof UserData) {
 				chain.doFilter(request, response);
 			} else {
-				HttpServletResponse httpResp = (HttpServletResponse) response;
-				httpResp.sendError(403);
+				((HttpServletResponse)response)
+					.sendRedirect(((HttpServletRequest) request)
+					.getSession().getServletContext()
+					.getContextPath() + "/login");
+				}
 			}
-		} else {
-			RequestDispatcher rd = request.getRequestDispatcher("WEB-INF/views/login.jsp");
-		}
 	}
 
 	public void init(FilterConfig fConfig) throws ServletException {
